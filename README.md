@@ -27,7 +27,7 @@ In general, running a `pocket-coffea` analysis happens in three steps.
 
 (3) Make plots
 
-The datasets have been included in this repo, so while instructions to recreate them are given here, one could skip directly to step (2) if desired.
+The dataset json files have been included in this repo, so while instructions to recreate them are given here, one could skip directly to step (2) if desired.
 
 **********************************************************************************************************************************
 (1) Build the datasets
