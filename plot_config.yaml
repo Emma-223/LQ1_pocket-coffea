@@ -1,0 +1,13 @@
+plotting_style:
+  colors_mc: 
+    DYJetsToLL: CMS_red
+
+  opts_ylim:
+    datamc:
+      ylim_log:
+        lo: 0.01
+        hi: 100000
+
+  signal_samples:
+    LQToDEle_M-1500: 1
+

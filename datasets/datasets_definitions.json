@@ -1,0 +1,58 @@
+{
+  "DYJetsToLL_M-50":{
+    "sample": "DYJetsToLL",
+    "json_output": "datasets/DYJetsToLL_M-50.json",
+    "files":[
+      {"das_names": ["/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2/NANOAODSIM"],
+       "metadata":{
+          "year":"2018",
+          "isMC": true,
+          "xsec": 6077.22,
+          "part":""
+        }
+      }
+    ]
+  },
+  "DATA_EGamma":{
+    "sample": "DATA_EGamma",
+    "json_output": "datasets/DATA_EGamma.json",
+    "files":[
+      {
+        "das_names":["/EGamma/Run2018A-UL2018_MiniAODv2_NanoAODv9-v1/NANOAOD"],
+        "metadata": {
+          "year": "2018",
+          "isMC": false,
+          "primaryDataset": "EGamma",
+          "era": "A"
+        }
+      },
+      {
+        "das_names":["/EGamma/Run2018B-UL2018_MiniAODv2_NanoAODv9-v1/NANOAOD"],
+        "metadata": {
+          "year": "2018",
+          "isMC": false,
+          "primaryDataset": "EGamma",
+          "era": "B"
+        }
+      },
+      {
+        "das_names":["/EGamma/Run2018C-UL2018_MiniAODv2_NanoAODv9-v1/NANOAOD"],
+        "metadata": {
+          "year": "2018",
+          "isMC": false,
+          "primaryDataset": "EGamma",
+          "era": "C"
+        }
+      },
+      {
+        "das_names":["/EGamma/Run2018D-UL2018_MiniAODv2_NanoAODv9-v3/NANOAOD"],
+        "metadata": {
+          "year": "2018",
+          "isMC": false,
+          "primaryDataset": "EGamma",
+          "era": "D"
+        }
+      }
+    ]
+  }
+}

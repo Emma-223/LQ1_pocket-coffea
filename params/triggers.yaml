@@ -1,0 +1,5 @@
+HLT_triggers:
+  "2018":
+    EGamma:
+      - Ele32_WPTight_GSF
+      - Photon200
