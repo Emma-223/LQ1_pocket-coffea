@@ -28,16 +28,16 @@ parameters = defaults.merge_parameters_from_files(default_parameters, "{}/params
 cfg = Configurator(
     parameters = parameters, 
     datasets = {
-        "jsons":["datasets/skimmed_dataset_definition.json"],
+        "jsons":["{}/datasets/DYJetsToLL_M-50.json".format(localdir), "{}/datasets/DATA_EGamma.json".format(localdir), "{}/datasets/LQToDEle_M-1500.json".format(localdir)],
         "filter": {
-            "samples": ["DYJetsToLL", "DATA_EGamma"],# "LQToDEle_M-1500"],
-            "samples_exclude": [],
+            "samples": ["DYJetsToLL", "DATA_EGamma"], #, "LQToDEle_M-1500"],
+            "samples_exclude": ["LQToDEle_M-1500"],
             "year":["2018"]
         }
     },
     
     workflow = eejjBaseProcessor,
-    workflow_options = {"dump_columns_as_arrays_per_chunk": "root://eosuser.cern.ch://eos/user/e/eipearso/LQ/lqData/testCoffeaSkims/columns"},
+    save_skimmed_files = "root://eosuser.cern.ch://eos/user/e/eipearso/LQ/lqData/testCoffeaSkims/skims/",
     skim = [
             eventFlags,
             goldenJson,
@@ -46,18 +46,17 @@ cfg = Configurator(
             get_HLTsel(primaryDatasets=["EGamma"])
     ],
     
-    preselections = [eejj_presel],
+    preselections = [passthrough],
 
     categories = {
-        "preselection": [passthrough],
-        "trainingRegion": [eejj_trainingRegion_common]
+        "sk": [passthrough]
     },
 
     weights_classes = common_weights,
 
     weights = {
         "common":{
-            "inclusive":["genWeight", "lumi", "XS", "pileup"],
+            "inclusive":{},
             "bycategory":{}
         },
         "bysample":{}
@@ -66,27 +65,13 @@ cfg = Configurator(
     variations = {
         "weights": {
             "common": {
-                "inclusive":["pileup"],
+                "inclusive":{},
                 "bycategory" : {}
             },
-            "bysample": {}    
+        "bysample": {
+        }    
         },
     },
 
-    variables = {
-        **count_hist(name="nEle", coll="ElectronGood", bins=5, start=0, stop=5),
-        **count_hist(name="nJet", coll="JetGood", bins=8, start=0, stop=8),
-        "mll" : HistConf( [Axis(coll="ll", field="mass", bins=50, start=0, stop=1000, label = "Mee")]),
-        "sT" : HistConf( [Axis(coll="events", field="sT_eejj", bins=50, start=0, stop=5000, label="sT_eejj")]),
-        "pT_ee" : HistConf( [Axis(coll="events", field="pT_ee", bins=50, start=0, stop=1000, label="Pt_ee")]),
-        "pt1stEle" : HistConf( [Axis(coll="events", field="pt1stEle", bins=50, start=0, stop=1000, label="Pt_Ele1")]),
-        "pt2ndEle" : HistConf( [Axis(coll="events", field="pt2ndEle", bins=50, start=0, stop=1000, label="Pt_Ele2")])
-    },
-    columns = {
-        "common": {
-            "inclusive": [ColOut("events",["sT_eejj","pt1stEle","pt2ndEle"]), ColOut("ll",["mass"])],
-            "bycategory": {}
-        },
-        "bysample":{}
-    }
+    variables = {}
 )
