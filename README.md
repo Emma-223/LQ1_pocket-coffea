@@ -14,7 +14,7 @@ apptainer shell -B /afs -B /cvmfs/cms.cern.ch \
                 -B ${XDG_RUNTIME_DIR}  --env KRB5CCNAME="FILE:${XDG_RUNTIME_DIR}/krb5cc" \
     /cvmfs/unpacked.cern.ch/gitlab-registry.cern.ch/cms-analysis/general/pocketcoffea:lxplus-el9-stable
 ```
-All commands listed here are to be run from inside this singularity container.
+All commands listed here are to be run from inside this singularity container unless otherwise noted.
 (The environment setup is also in the `pocket-coffea` documentation, see: https://pocketcoffea.readthedocs.io/en/stable/installation.html )
 
 A discussion of how the code works and some sample results are given in the slides here: https://indico.cern.ch/event/1539421/contributions/6477874/attachments/3052591/5400931/pocket-coffea_Emma_22Apr25.pdf
@@ -50,17 +50,42 @@ This is the reason that the signal dataset is in a separate `.json` file, and fo
 **********************************************************************************************************************************
 (2) Run the analysis
 ```
+pocket-coffea run --cfg config_skimOnly,py -o [name_of_output_dir] --executor dask@lxplus -ro params/run_options.yaml
+```
+This saves the skims in NanoAOD format.
+It has its own `run_options.yaml` file because these jobs require more memory than if we only save the final selection columns and histograms.
+It takes about an hour and a half total to process the DY and EGamma datasets.
+
+The output from this command includes a file `skimmed_dataset_definitions.json` which can be used as-is in any subsequent configs without the need to run `build-datasets`.
+Skims for EGamma and DY have already been made, so you could skip directly to running the preselection and final selections if desired (but see the note at the end of this section).
+
+To run the preselection and final selections:
+```
 pocket-coffea run --cfg config.py -o [name_of_output_dir] --executor dask@lxplus --scaleout 500
 ```
 The `--cfg` option points to the config file, `-o` specifies the directory to store the output.
 Then `--executor` specifies where to run (in this case condor submission from lxplus) and `--scaleout` is the number of workers.
 More info about executors can be found here: https://pocketcoffea.readthedocs.io/en/stable/running.html#executors
 
-For the code in this repo, the total run time for all of the samples is between 10 and 15 minutes once the jobs start to run.
+`pocket-coffea` uses dask to schedule jobs.
+It provides some useful job monitoring tools.
+I found some nice instructions on how to access it here: https://higgs-dna.readthedocs.io/en/latest/jobs.html#connect-to-the-dashboard .
+So for me, to connect to the dask dashboard on lxplus950 it worked to do the following from my local machine:
+```
+ssh -Y -N -f -L localhost:8000:lxplus950.cern.ch:8787 [my username]@lxplus950.cern.ch
+```
+Then, in a browser use `http://localhost:8000/status`
+
+For the code in this repo, the total run time to do the preseleciton and final selections for all of the samples is about 10 minutes once the jobs start to run.
 To run over just a little bit of data from each sample as a test, one can instead run 
 ```
 pocket-coffea run --cfg config.py -o [name_of_output_dir] --test
 ```
+Important note: 
+
+`config.py` reads skim files from Emma's CERNBox space. 
+The link is not posted here because this project is public, but if you ask Emma she will give you permission to access the relevant folder.
+
 **********************************************************************************************************************************
 (3) Make plots
 
