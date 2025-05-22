@@ -32,10 +32,10 @@ The dataset json files have been included in this repo, so while instructions to
 **********************************************************************************************************************************
 (1) Build the datasets
 ```
-pocket-coffea build-datasets --cfg datasets/datasets_definitions.json -o -rs 'T[123]_(FR|IT|BE|CH)_\w+'
+pocket-coffea build-datasets --cfg config/dataset_definitions/datasets_definitions.json -o -rs 'T[123]_(FR|IT|BE|CH)_\w+'
 ```
 ```
-pocket-coffea build-datasets --cfg datasets/datasets_definitions_signal.json -o -rs 'T[123]_(US)_\w+'
+pocket-coffea build-datasets --cfg config/dataset_definitions/datasets_definitions_signal.json -o -rs 'T[123]_(US)_\w+'
 ```
 The `-rs` option specifies allowed sites.
 This was not quite as straightforward as advertised.
