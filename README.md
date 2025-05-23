@@ -49,6 +49,8 @@ This was not quite as straightforward as advertised.
 This is the reason that the signal dataset is in a separate `.json` file, and for running separate commands.
 **********************************************************************************************************************************
 (2) Run the analysis
+
+(2-a) Skims
 ```
 pocket-coffea run --cfg config_skimOnly,py -o [name_of_output_dir] --executor condor@lxplus -ro params/run_options.yaml
 ```
@@ -59,7 +61,24 @@ Note that the skims run with direct condor submission rather than using dask, as
 The output from this command includes a file `skimmed_dataset_definitions.json` which can be used as-is in any subsequent configs without the need to run `build-datasets`.
 Skims for EGamma and DY have already been made, so you could skip directly to running the preselection and final selections if desired (but see the note at the end of this section).
 
-To run the preselection and final selections:
+This outputs many small files, and it is recommended to `hadd` them to get fewer, larger files. Pocket-coffea has a script for this which can be run as follows:
+
+Inside the container, run the following which produces scripts you will use to submit condor jobs. It will save the files to your current working directory. `[output folder]` is the folder in your AFS space that you specified with the `-o` option when you ran the skim jobs. `[place to put skims]` is the location where you would like the output NanoAOD root files to be saved.
+```
+pocket-coffea hadd-skimmed-files -fl [output folder]/output_all.coffea -o [place to put skims] --dry
+```
+Then, open the file `hadd_job_splitbyfile.sub` and change the job flavor from `esspresso` to `microcentury` (`esspresso` kills jobs after 20 minutes of runtime which I found to be too short).
+
+Finally, outside the container, run the following command to submit the condor jobs
+```
+condor_submit hadd_job_splitbyfile.sub
+```
+Note:
+When you run `hadd-skimmed-files`, it also produces a file `skimmed_dataset_definitions_hadd.json`. This can be used as-is in any later config files which run on the skims without the need to run `build-datasets`.
+
+(2-b) Preselection and training regions
+
+To run the preselection and training region selections:
 ```
 pocket-coffea run --cfg config.py -o [name_of_output_dir] --executor dask@lxplus --scaleout 500
 ```
