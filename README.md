@@ -50,11 +50,11 @@ This is the reason that the signal dataset is in a separate `.json` file, and fo
 **********************************************************************************************************************************
 (2) Run the analysis
 ```
-pocket-coffea run --cfg config_skimOnly,py -o [name_of_output_dir] --executor dask@lxplus -ro params/run_options.yaml
+pocket-coffea run --cfg config_skimOnly,py -o [name_of_output_dir] --executor condor@lxplus -ro params/run_options.yaml
 ```
 This saves the skims in NanoAOD format.
 It has its own `run_options.yaml` file because these jobs require more memory than if we only save the final selection columns and histograms.
-It takes about an hour and a half total to process the DY and EGamma datasets.
+Note that the skims run with direct condor submission rather than using dask, as the pocket-coffea experts have told us that this is better for large jobs.
 
 The output from this command includes a file `skimmed_dataset_definitions.json` which can be used as-is in any subsequent configs without the need to run `build-datasets`.
 Skims for EGamma and DY have already been made, so you could skip directly to running the preselection and final selections if desired (but see the note at the end of this section).
